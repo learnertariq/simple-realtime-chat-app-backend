@@ -3,11 +3,11 @@ body {
   position: relative;
 }
 
-.form-container {
+#form-container {
   position: absolute;
   bottom: 0;
 }
 
-.message-container p {
+#message-container p {
   background-color: lightblue;
 }

@@ -4,7 +4,23 @@ const io = require("socket.io")(3000, {
   },
 });
 
+const users = {};
+
 io.on("connection", (socket) => {
-  console.log("socket connected");
-  socket.emit("chat-message", "hello world");
+  socket.on("new-user", (user) => {
+    users[socket.id] = user;
+    socket.broadcast.emit("user-connected", users[socket.id]);
+  });
+
+  socket.on("send-message", (data) => {
+    socket.broadcast.emit("get-message", {
+      message: data,
+      user: users[socket.id],
+    });
+  });
+
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("user-disconnected", users[socket.id]);
+    delete users[users[socket.id]];
+  });
 });
